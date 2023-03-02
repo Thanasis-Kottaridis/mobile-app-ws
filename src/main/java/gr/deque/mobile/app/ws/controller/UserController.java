@@ -2,6 +2,7 @@ package gr.deque.mobile.app.ws.controller;
 
 import gr.deque.mobile.app.ws.utils.StringUtils;
 import gr.deque.mobile.app.ws.model.UserDto;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -79,7 +80,13 @@ public class UserController {
         @Note
         path parameter has to be in curly braces `path = "/{userId}"`
      */
-    @GetMapping(path = "/{userId}")
+    @GetMapping(
+            path = "/{userId}",
+            produces = {
+                    MediaType.APPLICATION_XML_VALUE,
+                    MediaType.APPLICATION_JSON_VALUE
+            }
+    )
     public UserDto getUser(@PathVariable String userId) {
         return mockUsers.stream()
                 .filter(user -> Objects.equals(user.getUserId(), userId))
