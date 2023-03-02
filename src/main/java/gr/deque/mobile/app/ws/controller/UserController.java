@@ -2,7 +2,9 @@ package gr.deque.mobile.app.ws.controller;
 
 import gr.deque.mobile.app.ws.utils.StringUtils;
 import gr.deque.mobile.app.ws.model.UserDto;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -78,7 +80,10 @@ public class UserController {
         xrisimopoioume to path argument tou ` @GetMapping`
 
         @Note
-        path parameter has to be in curly braces `path = "/{userId}"`
+        1. path parameter has to be in curly braces `path = "/{userId}"`
+        2. If we want to support returning multiple content format (eg. xml or json)
+           we need to use produces configuration
+        3. In order to return Custom Repose codes we have to use `ResponseEntity`
      */
     @GetMapping(
             path = "/{userId}",
@@ -87,11 +92,12 @@ public class UserController {
                     MediaType.APPLICATION_JSON_VALUE
             }
     )
-    public UserDto getUser(@PathVariable String userId) {
+    public ResponseEntity<UserDto> getUser(@PathVariable String userId) {
         return mockUsers.stream()
                 .filter(user -> Objects.equals(user.getUserId(), userId))
                 .findFirst()
-                .get();
+                .map(userDto -> new ResponseEntity<>(userDto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
