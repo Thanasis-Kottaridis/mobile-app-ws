@@ -1,4 +1,4 @@
-package gr.deque.mobile.app.ws.utils;
+package gr.deque.mobile.app.ws.common.utils;
 
 public class StringUtils {
     public static boolean isNullOrEmpty(String str) {
